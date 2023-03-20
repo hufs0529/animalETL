@@ -1,0 +1,17 @@
+input {
+  kafka {
+    bootstrap_servers => "localhost:9092"
+    topics => "animal"
+    consumer_threads => 1
+    codec => json
+  }
+}
+
+
+output {
+  elasticsearch {
+    hosts => ["http://43.201.148.117:9200","http://3.38.93.20:9200","http://43.201.112.68:9200"]
+    index => "animal"
+  }
+  stdout { codec => rubydebug }
+}

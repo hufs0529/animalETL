@@ -1,0 +1,84 @@
+version: '2.2'
+services:
+  es01:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    container_name: es01
+    environment:
+      - node.name=es01
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=3.38.93.20,43.201.112.68
+      - cluster.initial_master_nodes=43.201.148.117,3.38.93.20,43.201.112.68
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data01:/usr/share/elasticsearch/data
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - elastic
+  es02:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    container_name: es02
+    environment:
+      - node.name=es02
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=43.201.148.117,43.201.112.68
+      - cluster.initial_master_nodes=43.201.148.117,3.38.93.20,43.201.112.68
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data02:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+  es03:
+    image: docker.elastic.co/elasticsearch/elasticsearch:7.7.1
+    container_name: es03
+    environment:
+      - node.name=es03
+      - cluster.name=es-docker-cluster
+      - discovery.seed_hosts=43.201.148.117,3.38.93.20
+      - cluster.initial_master_nodes=43.201.148.117,3.38.93.20,43.201.112.68
+      - bootstrap.memory_lock=true
+      - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
+    ulimits:
+      memlock:
+        soft: -1
+        hard: -1
+    volumes:
+      - data03:/usr/share/elasticsearch/data
+    networks:
+      - elastic
+
+  kibana:
+    image: docker.elastic.co/kibana/kibana:7.7.1
+    container_name: kibana
+    environment:
+      - ELASTICSEARCH_HOSTS=http://43.201.148.117:9200
+    ports:
+      - 5601:5601
+    networks:
+      - elastic
+
+  logstash:
+    image: docker.elastic.co/logstash/logstash:7.7.1
+    container_name: logstash
+    volumes:
+      - ./logstash/config/:/home/ubuntu/elasticsearch/logstash/configlogstash.yml
+      - ./logstash/pipeline/:/home/ubuntu/elasticsearch/logstash/configlogstash.yml
+    environment:
+      - XPACK_MONITORING_ELASTICSEARCH_URL=http://43.201.148.117:9200
+      - ELASTICSEARCH_HOST=http://43.201.148.117:9200
+      - "LS_JAVA_OPTS=-Xms512m -Xmx512"
+    ports:
+      - 5044:5044
+    networks:
+      - elastic

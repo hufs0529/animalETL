@@ -1,0 +1,7 @@
+name=hdfs-source-connector
+connector.class=io.confluent.connect.hdfs.HdfsSourceConnector
+tasks.max=1
+topic=animal
+hdfs.url=hdfs://:9000
+input.path=/animal/animal.csv
+output.format=json

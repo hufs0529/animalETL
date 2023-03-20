@@ -1,0 +1,5 @@
+name=elasticsearch-sink
+connector.class=io.confluent.connect.elasticsearch.ElasticsearchSinkConnector
+tasks.max=1
+topics=animal
+connection.url=http://localhost:9200
