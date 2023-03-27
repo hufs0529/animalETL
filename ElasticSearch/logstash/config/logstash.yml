@@ -1,0 +1,4 @@
+http.host: "0.0.0.0"
+path.config: "/home/ubuntu/elasticsearch/logstash/pipeline/logstash.conf"
+xpack.monitoring.elasticsearch.hosts:
+  ["http://{es-1}:9200", "http://{es-2}:9200", "http://{es-3}:9200"]

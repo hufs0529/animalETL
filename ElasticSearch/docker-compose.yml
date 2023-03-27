@@ -6,8 +6,8 @@ services:
     environment:
       - node.name=es01
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=3.38.93.20,43.201.112.68
-      - cluster.initial_master_nodes=43.201.148.117,3.38.93.20,43.201.112.68
+      - discovery.seed_hosts={es-2},{es-3}
+      - cluster.initial_master_nodes={es-1},{es-2},{es-3}
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -27,8 +27,8 @@ services:
     environment:
       - node.name=es02
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=43.201.148.117,43.201.112.68
-      - cluster.initial_master_nodes=43.201.148.117,3.38.93.20,43.201.112.68
+      - discovery.seed_hosts={es-1},{es-3}
+      - cluster.initial_master_nodes={es-1},{es-2},{es-3}
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -45,8 +45,8 @@ services:
     environment:
       - node.name=es03
       - cluster.name=es-docker-cluster
-      - discovery.seed_hosts=43.201.148.117,3.38.93.20
-      - cluster.initial_master_nodes=43.201.148.117,3.38.93.20,43.201.112.68
+      - discovery.seed_hosts={es-1},{es-2}
+      - cluster.initial_master_nodes={es-1},{es-2},{es-3}
       - bootstrap.memory_lock=true
       - "ES_JAVA_OPTS=-Xms512m -Xmx512m"
     ulimits:
@@ -62,7 +62,7 @@ services:
     image: docker.elastic.co/kibana/kibana:7.7.1
     container_name: kibana
     environment:
-      - ELASTICSEARCH_HOSTS=http://43.201.148.117:9200
+      - ELASTICSEARCH_HOSTS=http://{es-1}:9200
     ports:
       - 5601:5601
     networks:
@@ -75,9 +75,9 @@ services:
       - ./logstash/config/:/home/ubuntu/elasticsearch/logstash/configlogstash.yml
       - ./logstash/pipeline/:/home/ubuntu/elasticsearch/logstash/configlogstash.yml
     environment:
-      - XPACK_MONITORING_ELASTICSEARCH_URL=http://43.201.148.117:9200
-      - ELASTICSEARCH_HOST=http://43.201.148.117:9200
-      - "LS_JAVA_OPTS=-Xms512m -Xmx512"
+      - XPACK_MONITORING_ELASTICSEARCH_URL=http://{es-1}:9200
+      - ELASTICSEARCH_HOST=http://{es-1}:9200
+      - "LS_JAVA_OPTS=-Xms256m -Xmx256"
     ports:
       - 5044:5044
     networks:
