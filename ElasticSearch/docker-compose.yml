@@ -72,7 +72,7 @@ services:
     image: docker.elastic.co/logstash/logstash:7.7.1
     container_name: logstash
     volumes:
-      - ./logstash/config/:/home/ubuntu/elasticsearch/logstash/configlogstash.yml
+      - ./logstash/config/:/home/ubuntu/elasticsearch/logstash/pipeline/logstash.conf
       - ./logstash/pipeline/:/home/ubuntu/elasticsearch/logstash/configlogstash.yml
     environment:
       - XPACK_MONITORING_ELASTICSEARCH_URL=http://{es-1}:9200
